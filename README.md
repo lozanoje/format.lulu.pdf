@@ -14,8 +14,8 @@ The program does the following:
 ## Requirements
 
 * R language, a statistical and graphics program; you can download and install from www.r-project.org
-* Imagemagick, a program to manipulate images; you can download It from www.imagemagick.org or install it inside R (see below).
-* Community release of Coherent PDF.
+* Imagemagick, a program to manipulate images; you can download it from www.imagemagick.org.
+* Community release of Coherent PDF; you can download it from community.coherentpdf.com.
 
 ## Notes on installation
 
@@ -23,7 +23,10 @@ The program does the following:
 
 Use installers at:
 
+http://www.r-project.org
+
 http://www.imagemagick.org
+
 https://community.coherentpdf.com
 
 ### How to install required packages:
