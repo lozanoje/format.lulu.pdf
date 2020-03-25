@@ -70,7 +70,8 @@ format.lulu.pdf(i.pdf = "path.to.the.original.pdf",
 
 ## Output
 
-
+* portadacompleta.pdf, pdf with the cover
+* textofinal.pdf, pdf with the contents
 
 ## More parameters of the function
 
@@ -87,10 +88,9 @@ format.lulu.pdf(i.pdf = "path.to.the.original.pdf",
 * i.pages.front=NA, which page is the front page
 * i.pages.back=NA, which page is the back page
 * i.pages.contents=NA, which pages are the contents, the format can contain "-" for range of pages and "," por concatenating segment, for example: 3-10,20-25 (from pages 3 to 10 and from 20 to 25)
-* i.pages.add=NA, add page at this positions
+* i.pages.add=NA, add page at these locations
 * i.delete.temp=T, delete temporary files
 * i.additional.shifts=data.frame(), more shifts for specific pages, it must be a data.frame with columns "page"" and "shift", for example: data.frame(page=c(46,36,129), shift=c(0.05,0.05,-0.05))
-
 * i.ppp = 300, density of images for generating the cover
 * i.spine = NA, length of spine width, as shown in lulu when creating the pdf
 * i.spine.color="#000000", background color of the spine
