@@ -17,7 +17,8 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
                             i.spine.color="#000000",
                             i.rotate.right=NA,
                             i.rotate.left=NA,
-                            i.convert="-trim +repage") {
+                            i.convert="-trim +repage",
+                            i.embedded.fonts=F) {
 
   if(!dir.exists(i.out)) dir.create(i.out)
 
@@ -95,13 +96,15 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
   cat("\tEtiquetando: ", numbering,"\n", sep="")
   system.out.null <- system(paste0("\"", cpdf.file, "\" -add-page-labels \"", file.path(i.out, "texto1.pdf"), "\" ",numbering," -label-style DecimalArabic -o \"", file.path(i.out, "texto2.pdf"), "\""), intern = T)
   # system(paste0("\"",cpdf.file, "\" -missing-fonts \"",file.path(i.out, "texto2.pdf"), "\""), intern = T)
-  temp1 <- pdf_fonts(i.pdf) %>%
-    filter(!embedded) 
-  if (NROW(temp1)>0){
-    cat("\t?AVISO! Fuentes no incrustadas:\n")
-    print(temp1)
+  if (!i.embedded.fonts){
+    temp1 <- pdf_fonts(i.pdf) %>%
+      filter(!embedded) 
+    if (NROW(temp1)>0){
+      cat("\t?AVISO! Fuentes no incrustadas:\n")
+      print(temp1)
+    }
+    rm("temp1")    
   }
-  rm("temp1")
   # Escalado de seguridad
   cat("\tEscalado de seguridad: ", i.width + 0.25 - i.white, "x",i.height + 0.25 - i.white,"\n", sep="")
   system.out.null <- system(paste0("\"", cpdf.file, "\" -scale-to-fit \"", i.width + 0.25 - i.white, "in ", i.height + 0.25 - i.white, "in\" \"", file.path(i.out, "texto2.pdf"), "\" -o \"", file.path(i.out, "texto3.pdf"), "\""), intern = T)

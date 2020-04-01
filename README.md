@@ -100,3 +100,4 @@ format.lulu.pdf(i.pdf = "path.to.the.original.pdf",
 * i.rotate.right=NA, pages to rotate to the right (clockwise)
 * i.rotate.left=NA, pages to rotate to the left (counterclockwise)
 * i.convert="-trim +repage", more parameters to the convert executable for imagemagick
+* i.embedded.fonts=F, set to True not to check if there are missing embedded fonts, this prevents from using pdf_fonts, which sometimes fails with certains pdfs
