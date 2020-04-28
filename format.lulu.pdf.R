@@ -28,10 +28,15 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
     mutate(booksizel=tolower(booksize), aspect=height/width)
   
   cat("Informacion:\n")
-  info <- pdf_info(i.pdf)
-  pages <- pdf_pagesize(i.pdf)
+  suppressMessages(info <- pdf_info(i.pdf))
+  
+  suppressMessages(pages <- pdf_pagesize(i.pdf) %>%
+                     group_by(width, height) %>%
+                     summarise(ene=n()) %>%
+                     arrange(desc(ene)))
+
   cat("\tProcesando ", i.pdf,"\n")
-  cat("\tTamanio original: ", pages$width[2] / 72, " x ", pages$heigh[2] / 72,"\n" , sep="")
+  cat("\tTamanio original: ", pages$width[1] / 72, " x ", pages$height[1] / 72,"\n" , sep="")
 
   if (is.numeric(i.width)) i.width <- i.width[1] else i.width = 8.5
   if (is.numeric(i.height)) i.height <- i.height[1] else i.height = 11
@@ -92,13 +97,13 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
     system.out.null <- system(paste0("\"", cpdf.file, "\" -pad-after \"", file.path(i.out, "texto1.pdf"), "\" ", i.pages.add, " -o \"", file.path(i.out, "texto1.pdf"), "\""), intern = T) 
   }
   # Etiquetar paginas automaticamente
-  numbering <- paste0("1-", pdf_info(file.path(i.out, "texto1.pdf"))$pages, sep="")
+  suppressMessages(numbering <- paste0("1-", pdf_info(file.path(i.out, "texto1.pdf"))$pages, sep=""))
   cat("\tEtiquetando: ", numbering,"\n", sep="")
   system.out.null <- system(paste0("\"", cpdf.file, "\" -add-page-labels \"", file.path(i.out, "texto1.pdf"), "\" ",numbering," -label-style DecimalArabic -o \"", file.path(i.out, "texto2.pdf"), "\""), intern = T)
   # system(paste0("\"",cpdf.file, "\" -missing-fonts \"",file.path(i.out, "texto2.pdf"), "\""), intern = T)
   if (!i.embedded.fonts){
-    temp1 <- pdf_fonts(i.pdf) %>%
-      filter(!embedded) 
+    suppressMessages(temp1 <- pdf_fonts(i.pdf) %>%
+      filter(!embedded))
     if (NROW(temp1)>0){
       cat("\t?AVISO! Fuentes no incrustadas:\n")
       print(temp1)
@@ -137,7 +142,7 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
   cat("Procesado final:\n", sep="")
   cat("\tComprimiendo el fichero final.\n", sep="")
   system.out.null <- system(paste0("\"", cpdf.file, "\" -squeeze \"", file.path(i.out, "texto7.pdf"), "\" -o \"", file.path(i.out, "textofinal.pdf"), "\""), intern = T)
-  pages <- pdf_pagesize(file.path(i.out, "textofinal.pdf"))
+  suppressMessages(pages <- pdf_pagesize(file.path(i.out, "textofinal.pdf")))
   cat("\tFichero final ", file.path(i.out, "textofinal.pdf"),"\n", sep="")
   cat("\tAncho: ", pages$width[2] / 72, ", Alto: ", pages$heigh[2] / 72,"\n" , sep="")
   
