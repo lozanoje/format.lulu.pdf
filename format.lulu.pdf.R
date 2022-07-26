@@ -156,13 +156,19 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
     systxt <- paste0("\"",conv.file,"\" -size ", t.width*2+t.bleed*2+t.spine,"x",t.height+2*t.bleed," xc:white ",
                      "( xc:\"",i.spine.color,"\" -resize ",(t.width*2+t.spine),"x",t.height,"! ) -geometry +",t.bleed,"+",t.bleed," -composite ",
                      "( \"",file.path(i.out, "contraportada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",t.bleed,"+",t.bleed," -composite ",
-                     "( \"",file.path(i.out, "portada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",(t.bleed+t.width+t.spine),"+",t.bleed," -composite ",
+                     "( \"",file.path(i.out, "portada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",(t.bleed+t.width+t.spine),"+",t.bleed,
+                     " -draw \"line ",t.bleed+t.width,",",0," ",t.bleed+t.width,",",t.bleed+t.bleed+t.height,"\"",
+                     " -draw \"line ",t.bleed+t.width+t.spine,",",0," ",t.bleed+t.width+t.spine,",",t.bleed+t.bleed+t.height,"\"",
+                     " -composite ",
                      "\"",file.path(i.out, "portadacompleta.png"),"\"")
     system.out.null <- system(systxt, intern = T)
     systxt <- paste0("\"",conv.file,"\" -size ", t.width*2+t.bleed*2+t.spine,"x",t.height+2*t.bleed," xc:white ",
                      "( xc:\"",i.spine.color,"\" -resize ",(t.width*2+t.spine),"x",t.height,"! ) -geometry +",t.bleed,"+",t.bleed," -composite ",
                      "( \"",file.path(i.out, "contraportada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",t.bleed,"+",t.bleed," -composite ",
-                     "( \"",file.path(i.out, "portada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",(t.bleed+t.width+t.spine),"+",t.bleed," -composite ",
+                     "( \"",file.path(i.out, "portada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",(t.bleed+t.width+t.spine),"+",t.bleed,
+                     " -draw \"line ",t.bleed+t.width,",",0," ",t.bleed+t.width,",",t.bleed+t.bleed+t.height,"\"",
+                     " -draw \"line ",t.bleed+t.width+t.spine,",",0," ",t.bleed+t.width+t.spine,",",t.bleed+t.bleed+t.height,"\"",                     
+                     " -composite ",
                      "-density 300 -units pixelsperinch \"",file.path(i.out, "portadacompleta.pdf"),"\"")
     system.out.null <- system(systxt, intern = T)
     # convert -size 5320x3375 xc:white 
