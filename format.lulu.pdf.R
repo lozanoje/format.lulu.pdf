@@ -18,10 +18,11 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
                             i.rotate.right=NA,
                             i.rotate.left=NA,
                             i.convert="-trim +repage",
-                            i.embedded.fonts=F) {
+                            i.embedded.fonts=F,
+                            i.bleed.wrap = 0.125, i.book.trim =NA) {
 
   if(!dir.exists(i.out)) dir.create(i.out)
-
+  
   books <- data.frame(booksize=c("US Trade","US Letter","Digest","Executive","A5","A4","Royal","Crown Quarto","Square","Small Square","Pocket Book","US Letter Landscape","A4 Landscape","Small Landscape","Calendar","Comic Book"),
                       width=c(6,8.5,5.5,7,5.83,8.27,6.14,7.44,8.5,7.5,4.25,11,11.69,9,11,6.63),
                       height=c(9,11,8.5,10,8.27,11.69,9.21,9.68,8.5,7.5,6.875,8.5,8.27,7,8.5,10.25), stringsAsFactors=F) %>%
@@ -146,10 +147,12 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
   cat("\tFichero final ", file.path(i.out, "textofinal.pdf"),"\n", sep="")
   cat("\tAncho: ", pages$width[2] / 72, ", Alto: ", pages$heigh[2] / 72,"\n" , sep="")
   
+  if (any(is.na(i.book.trim))) i.book.trim <- c(i.width,i.height)
+  
   if (is.numeric(i.spine)){
-    t.bleed = round(0.125*i.ppp)
-    t.width = round(i.width*i.ppp)
-    t.height = round(i.height*i.ppp)
+    t.bleed = round(i.bleed.wrap*i.ppp)
+    t.width = round(i.book.trim[1]*i.ppp)
+    t.height = round(i.book.trim[2]*i.ppp)
     t.spine = i.spine*i.ppp
     
     cat("\tGenerando portada.\n", sep="")
