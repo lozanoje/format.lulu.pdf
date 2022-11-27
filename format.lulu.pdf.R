@@ -19,7 +19,9 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
                             i.rotate.left=NA,
                             i.convert="-trim +repage",
                             i.embedded.fonts=F,
-                            i.bleed.wrap = 0.125, i.book.trim =NA) {
+                            i.bleed.wrap = 0.125, 
+                            i.book.trim =NA,
+                            i.percent.safety=1) {
 
   if(!dir.exists(i.out)) dir.create(i.out)
   
@@ -150,27 +152,37 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
   if (any(is.na(i.book.trim))) i.book.trim <- c(i.width,i.height)
   
   if (is.numeric(i.spine)){
-    t.bleed = round(i.bleed.wrap*i.ppp)
-    t.width = round(i.book.trim[1]*i.ppp)
-    t.height = round(i.book.trim[2]*i.ppp)
-    t.spine = i.spine*i.ppp
+    
+
+    
+    # t.bleed = round(i.bleed.wrap*i.ppp)
+    # t.width = round(i.book.trim[1]*i.ppp)
+    # t.height = round(i.book.trim[2]*i.ppp)
+    
+    t.bleed.w = round((i.bleed.wrap+(i.book.trim[1]-i.width)*(1-i.percent.safety))*i.ppp)
+    t.bleed.h = round((i.bleed.wrap+(i.book.trim[2]-i.height)*(1-i.percent.safety)/2)*i.ppp)
+    t.width = round((i.width+(i.book.trim[1]-i.width)*i.percent.safety)*i.ppp)
+    t.height = round((i.height+(i.book.trim[2]-i.height)*i.percent.safety)*i.ppp)
+    
+    
+    t.spine = round(i.spine*i.ppp)
     
     cat("\tGenerando portada.\n", sep="")
-    systxt <- paste0("\"",conv.file,"\" -size ", t.width*2+t.bleed*2+t.spine,"x",t.height+2*t.bleed," xc:white ",
-                     "( xc:\"",i.spine.color,"\" -resize ",(t.width*2+t.spine),"x",t.height,"! ) -geometry +",t.bleed,"+",t.bleed," -composite ",
-                     "( \"",file.path(i.out, "contraportada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",t.bleed,"+",t.bleed," -composite ",
-                     "( \"",file.path(i.out, "portada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",(t.bleed+t.width+t.spine),"+",t.bleed,
-                     " -draw \"line ",t.bleed+t.width,",",0," ",t.bleed+t.width,",",t.bleed+t.bleed+t.height,"\"",
-                     " -draw \"line ",t.bleed+t.width+t.spine,",",0," ",t.bleed+t.width+t.spine,",",t.bleed+t.bleed+t.height,"\"",
+    systxt <- paste0("\"",conv.file,"\" -size ", t.width*2+t.bleed.w*2+t.spine,"x",t.height+2*t.bleed.h," xc:white ",
+                     "( xc:\"",i.spine.color,"\" -resize ",(t.width*2+t.spine),"x",t.height,"! ) -geometry +",t.bleed.w,"+",t.bleed.h," -composite ",
+                     "( \"",file.path(i.out, "contraportada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",t.bleed.w,"+",t.bleed.h," -composite ",
+                     "( \"",file.path(i.out, "portada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",(t.bleed.w+t.width+t.spine),"+",t.bleed.h,
+                     " -draw \"line ",t.bleed.w+t.width,",",0," ",t.bleed.w+t.width,",",t.bleed.h+t.bleed.h+t.height,"\"",
+                     " -draw \"line ",t.bleed.w+t.width+t.spine,",",0," ",t.bleed.w+t.width+t.spine,",",t.bleed.h+t.bleed.h+t.height,"\"",
                      " -composite ",
                      "\"",file.path(i.out, "portadacompleta.png"),"\"")
     system.out.null <- system(systxt, intern = T)
-    systxt <- paste0("\"",conv.file,"\" -size ", t.width*2+t.bleed*2+t.spine,"x",t.height+2*t.bleed," xc:white ",
-                     "( xc:\"",i.spine.color,"\" -resize ",(t.width*2+t.spine),"x",t.height,"! ) -geometry +",t.bleed,"+",t.bleed," -composite ",
-                     "( \"",file.path(i.out, "contraportada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",t.bleed,"+",t.bleed," -composite ",
-                     "( \"",file.path(i.out, "portada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",(t.bleed+t.width+t.spine),"+",t.bleed,
-                     " -draw \"line ",t.bleed+t.width,",",0," ",t.bleed+t.width,",",t.bleed+t.bleed+t.height,"\"",
-                     " -draw \"line ",t.bleed+t.width+t.spine,",",0," ",t.bleed+t.width+t.spine,",",t.bleed+t.bleed+t.height,"\"",                     
+    systxt <- paste0("\"",conv.file,"\" -size ", t.width*2+t.bleed.w*2+t.spine,"x",t.height+2*t.bleed.h," xc:white ",
+                     "( xc:\"",i.spine.color,"\" -resize ",(t.width*2+t.spine),"x",t.height,"! ) -geometry +",t.bleed.w,"+",t.bleed.h," -composite ",
+                     "( \"",file.path(i.out, "contraportada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",t.bleed.w,"+",t.bleed.h," -composite ",
+                     "( \"",file.path(i.out, "portada.png"),"\" -resize ",t.width,"x",t.height,"! ) -geometry +",(t.bleed.w+t.width+t.spine),"+",t.bleed.h,
+                     " -draw \"line ",t.bleed.w+t.width,",",0," ",t.bleed.w+t.width,",",t.bleed.h+t.bleed.h+t.height,"\"",
+                     " -draw \"line ",t.bleed.w+t.width+t.spine,",",0," ",t.bleed.w+t.width+t.spine,",",t.bleed.h+t.bleed.h+t.height,"\"",                     
                      " -composite ",
                      "-density 300 -units pixelsperinch \"",file.path(i.out, "portadacompleta.pdf"),"\"")
     system.out.null <- system(systxt, intern = T)
