@@ -159,11 +159,19 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
     # t.width = round(i.book.trim[1]*i.ppp)
     # t.height = round(i.book.trim[2]*i.ppp)
     
-    t.bleed.w = round((i.bleed.wrap+(i.book.trim[1]-i.width)*(1-i.percent.safety))*i.ppp)
-    t.bleed.h = round((i.bleed.wrap+(i.book.trim[2]-i.height)*(1-i.percent.safety)/2)*i.ppp)
-    t.width = round((i.width+(i.book.trim[1]-i.width)*i.percent.safety)*i.ppp)
-    t.height = round((i.height+(i.book.trim[2]-i.height)*i.percent.safety)*i.ppp)
+    # t.bleed.w = round((i.bleed.wrap+(i.book.trim[1]-i.width)*(1-i.percent.safety))*i.ppp)
+    # t.bleed.h = round((i.bleed.wrap+(i.book.trim[2]-i.height)*(1-i.percent.safety)/2)*i.ppp)
+    # t.width = round((i.width+(i.book.trim[1]-i.width)*i.percent.safety)*i.ppp)
+    # t.height = round((i.height+(i.book.trim[2]-i.height)*i.percent.safety)*i.ppp)
+
+    t.bleed.w = round((i.bleed.wrap*(1-i.percent.safety))*i.ppp)
+    t.width = round((i.width+i.bleed.wrap)*i.ppp)-t.bleed.w
+    t.width+t.bleed.w == round((i.width+i.bleed.wrap)*i.ppp)
     
+    t.bleed.h = round((i.bleed.wrap*(1-i.percent.safety))*i.ppp)
+    t.height = round((i.height + 2*i.bleed.wrap)*i.ppp)-2*t.bleed.h
+    t.height+2*t.bleed.h == round((i.height+2*i.bleed.wrap)*i.ppp)
+       
     
     t.spine = round(i.spine*i.ppp)
     
