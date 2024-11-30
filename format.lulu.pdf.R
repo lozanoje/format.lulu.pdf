@@ -21,7 +21,8 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
                             i.embedded.fonts=F,
                             i.bleed.wrap = 0.125, 
                             i.book.trim =NA,
-                            i.percent.safety=1) {
+                            i.percent.safety=1,
+                            i.use.magick=T) {
 
   if(!dir.exists(i.out)) dir.create(i.out)
   
@@ -59,7 +60,12 @@ format.lulu.pdf <- function(i.pdf, i.out = getwd(), i.cpdf = "H:/Portables/cpdf"
   if (is.na(i.pages.contents)) i.pages.contents <- paste0("2-",info$pages - 1)
 
   cpdf.file <- file.path(i.cpdf, "cpdf.exe")
+  
+  if (i.use.magick){
+  conv.file <- file.path(i.magick, "magick.exe")
+  }else{
   conv.file <- file.path(i.magick, "convert.exe")
+  }
 
   # png::writePNG(pdf_render_page(i.pdf, page = 1, dpi = 300), file.path(i.out, "portada.png"))
   # png::writePNG(pdf_render_page(i.pdf, page = pdf_length(i.pdf), dpi = 300), file.path(i.out, "contraportada.png"))
